@@ -2,12 +2,15 @@ let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
 function addExpense() {
   const amount = document.getElementById("amount").value;
+  const categoryInput = document.getElementById('expense-category');
+
   const category = document.getElementById("category").value;
   const date = document.getElementById("date").value;
 
-  if (!amount || !category || !date) {
-    alert("Please fill all fields.");
-    return;
+ if (name && amount > 0) {
+  const date = new Date().toLocaleString();
+  expenses.push({ name, amount, date });
+
   }
 
   const expense = { amount: Number(amount), category, date };
@@ -25,6 +28,11 @@ function deleteExpense(index) {
 }
 
 function renderExpenses() {
+    item.innerHTML = `
+  <span><strong>${expense.name}</strong> <small class="text-muted">[${expense.category}]</small></span>
+  <span>₹${expense.amount.toFixed(2)} <button onclick="deleteExpense(${index})" class="btn btn-sm btn-danger ms-2">Delete</button></span>
+`;
+
   const list = document.getElementById("expenseList");
   list.innerHTML = "";
 
@@ -38,8 +46,32 @@ function renderExpenses() {
     list.appendChild(li);
   });
 
+
   document.getElementById("total").innerText = `Total: Rs. ${total}`;
+  renderHistory();
+
 }
+function renderHistory() {
+  const historyList = document.getElementById('history-list');
+  historyList.innerHTML = '';
+
+  if (expenses.length === 0) {
+    historyList.innerHTML = '<p>No expenses added yet.</p>';
+    return;
+  }
+
+  expenses.forEach(expense => {
+    const entry = document.createElement('div');
+    entry.className = 'expense-item';
+    entry.innerHTML = `
+      <div><strong>${expense.name}</strong></div>
+      <div>₹${expense.amount.toFixed(2)}</div>
+      <div class="text-muted">${expense.date || 'Unknown date'}</div>
+    `;
+    historyList.appendChild(entry);
+  });
+}
+
 
 function clearInputs() {
   document.getElementById("amount").value = "";
