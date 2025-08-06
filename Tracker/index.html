@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>💸 Expense Tracker</h1>
+    <input type="number" id="amount" placeholder="Amount (Rs)">
+    <input type="text" id="category" placeholder="Category (e.g. Food)">
+    <input type="date" id="date">
+    <button onclick="addExpense()">Add Expense</button>
+
+    <ul id="expenseList"></ul>
+    <h3 id="total">Total: Rs. 0</h3>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
