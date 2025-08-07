@@ -4,11 +4,10 @@ let budget = Number(localStorage.getItem("budget")) || 0;
 document.addEventListener("DOMContentLoaded", function () {
   renderExpenses();
 
-  // Attach the form submission prevention here
   const expenseForm = document.getElementById("expenseForm");
   if (expenseForm) {
     expenseForm.addEventListener("submit", function (e) {
-      e.preventDefault(); // 🚫 Stop the page from reloading
+      e.preventDefault();
       addExpense();
     });
   }
@@ -37,8 +36,9 @@ function addExpense() {
 
     renderExpenses();
     clearInputs();
+    showToast("Expense added successfully! 💸", "success");
   } else {
-    alert("Please fill in all fields.");
+    showToast("Please fill in all fields ⚠️", "error");
   }
 }
 
@@ -46,6 +46,7 @@ function deleteExpense(index) {
   expenses.splice(index, 1);
   localStorage.setItem("expenses", JSON.stringify(expenses));
   renderExpenses();
+  showToast("Expense deleted 🗑️", "info");
 }
 
 function renderExpenses() {
@@ -57,10 +58,15 @@ function renderExpenses() {
   expenses.forEach((expense, index) => {
     total += expense.amount;
     const li = document.createElement("li");
+    li.className = "list-group-item d-flex justify-content-between align-items-start";
     li.innerHTML = `
-      <strong>${expense.name}</strong> - ₹${expense.amount.toFixed(2)}
-      <small class="text-muted">[${expense.category}]</small>
-      <span style="float:right;">${expense.date}</span>
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">${expense.name}</div>
+        <small class="text-muted">${expense.category}</small>
+        <br>
+        <small class="text-muted">${expense.date}</small>
+      </div>
+      <span class="badge bg-primary rounded-pill">₹${expense.amount.toFixed(2)}</span>
       <button onclick="deleteExpense(${index})" class="btn btn-sm btn-danger ms-2">Delete</button>
     `;
     list.appendChild(li);
@@ -77,6 +83,9 @@ function setBudget() {
     budget = Number(budgetInput);
     localStorage.setItem("budget", budget);
     updateBudgetUI();
+    showToast("Budget set ✅", "success");
+  } else {
+    showToast("Enter a valid budget amount ⚠️", "error");
   }
 }
 
@@ -84,6 +93,14 @@ function updateBudgetUI() {
   const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
   document.getElementById("budgetDisplay").innerText = budget.toFixed(2);
   document.getElementById("remainingDisplay").innerText = (budget - total).toFixed(2);
+
+  const remainingBox = document.getElementById("remainingDisplay");
+  if (budget - total < 0) {
+    remainingBox.style.color = "red";
+    showToast("Budget Exceeded 🚨", "error");
+  } else {
+    remainingBox.style.color = "#198754";
+  }
 }
 
 function renderHistory() {
@@ -91,17 +108,24 @@ function renderHistory() {
   historyList.innerHTML = '';
 
   if (expenses.length === 0) {
-    historyList.innerHTML = '<p>No expenses added yet.</p>';
+    historyList.innerHTML = '<p class="text-muted">No expenses added yet.</p>';
     return;
   }
 
   expenses.forEach(expense => {
     const entry = document.createElement('div');
-    entry.className = 'expense-item';
+    entry.className = 'card mb-2 p-2 shadow-sm';
     entry.innerHTML = `
-      <div><strong>${expense.name}</strong></div>
-      <div>₹${expense.amount.toFixed(2)}</div>
-      <div class="text-muted">${expense.category} | ${expense.date}</div>
+      <div class="d-flex justify-content-between">
+        <div>
+          <strong>${expense.name}</strong><br>
+          <small class="text-muted">${expense.category}</small>
+        </div>
+        <div class="text-end">
+          <span class="text-primary">₹${expense.amount.toFixed(2)}</span><br>
+          <small class="text-muted">${expense.date}</small>
+        </div>
+      </div>
     `;
     historyList.appendChild(entry);
   });
@@ -112,4 +136,20 @@ function clearInputs() {
   document.getElementById("amount").value = "";
   document.getElementById("category").value = "";
   document.getElementById("date").value = "";
+}
+
+function showToast(message, type = "info") {
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.innerText = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add("show");
+  }, 100);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.addEventListener("transitionend", () => toast.remove());
+  }, 3000);
 }

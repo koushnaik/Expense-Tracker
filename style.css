@@ -1,60 +1,192 @@
+/* Reset some default styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  padding: 40px 20px;
   text-align: center;
+  color: #333;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
-  max-width: 400px;
+  max-width: 450px;
   margin: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+  background: #ffffff;
+  padding: 30px 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.3s ease;
 }
 
 input, button {
-  padding: 10px;
-  margin: 5px;
-  width: 90%;
-  border-radius: 5px;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
+  border-radius: 8px;
   border: 1px solid #ccc;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  border-color: #3cb371;
+  outline: none;
+  box-shadow: 0 0 5px rgba(60, 179, 113, 0.4);
 }
 
 button {
   background-color: #3cb371;
-  color: white;
+  color: #fff;
+  font-weight: 600;
+  border: none;
   cursor: pointer;
+}
+
+button:hover {
+  background-color: #32a260;
 }
 
 ul {
   list-style: none;
   padding: 0;
+  margin-top: 20px;
 }
 
 li {
-  padding: 8px;
+  padding: 12px 16px;
   margin-top: 10px;
-  background-color: #eee;
-  border-radius: 5px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
   position: relative;
+  font-size: 15px;
+  text-align: left;
+  transition: background-color 0.3s ease;
+}
+
+li:hover {
+  background-color: #e9ecef;
 }
 
 li button {
   position: absolute;
-  right: 10px;
-  top: 8px;
-  background: red;
+  right: 12px;
+  top: 12px;
+  background: #dc3545;
   color: white;
   border: none;
-  border-radius: 3px;
-  padding: 5px;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
+
+li button:hover {
+  background-color: #c82333;
+}
+
 #expense-history .expense-item {
   border-bottom: 1px dashed #ccc;
-  padding: 8px 0;
+  padding: 10px 0;
 }
+
+/* Toast Styles */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #444;
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: 8px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity 0.5s ease, transform 0.3s ease;
+  transform: translateY(20px);
+  font-size: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.toast.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.toast.success {
+  background-color: #28a745;
+}
+
+.toast.error {
+  background-color: #dc3545;
+}
+
+.toast.info {
+  background-color: #17a2b8;
+}
+
+/* Dark Mode */
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-mode .container {
+  background-color: #1e1e1e;
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode input, 
+body.dark-mode button {
+  border: 1px solid #444;
+}
+
+body.dark-mode input {
+  background-color: #2a2a2a;
+  color: #eee;
+}
+
+body.dark-mode button {
+  background-color: #3cb371;
+}
+
+body.dark-mode button:hover {
+  background-color: #32a260;
+}
+
+body.dark-mode li {
+  background-color: #2a2a2a;
+}
+
+body.dark-mode li:hover {
+  background-color: #333;
+}
+
 body.dark-mode #expense-history .expense-item {
   border-bottom: 1px dashed #444;
+}
+
+body.dark-mode .toast {
+  background-color: #2f2f2f;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .toast.success {
+  background-color: #1e7e34;
+}
+
+body.dark-mode .toast.error {
+  background-color: #a71d2a;
+}
+
+body.dark-mode .toast.info {
+  background-color: #138496;
 }
