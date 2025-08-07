@@ -1,4 +1,23 @@
 let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+let budget = Number(localStorage.getItem("budget")) || 0;
+
+document.addEventListener("DOMContentLoaded", function () {
+  renderExpenses();
+
+  // Attach the form submission prevention here
+  const expenseForm = document.getElementById("expenseForm");
+  if (expenseForm) {
+    expenseForm.addEventListener("submit", function (e) {
+      e.preventDefault(); // 🚫 Stop the page from reloading
+      addExpense();
+    });
+  }
+
+  const budgetBtn = document.getElementById("setBudgetBtn");
+  if (budgetBtn) {
+    budgetBtn.addEventListener("click", setBudget);
+  }
+});
 
 function addExpense() {
   const amount = document.getElementById("amount").value;
@@ -49,6 +68,22 @@ function renderExpenses() {
 
   document.getElementById("total").innerText = `Total: ₹${total.toFixed(2)}`;
   renderHistory();
+  updateBudgetUI();
+}
+
+function setBudget() {
+  const budgetInput = document.getElementById("budgetInput").value;
+  if (budgetInput && budgetInput > 0) {
+    budget = Number(budgetInput);
+    localStorage.setItem("budget", budget);
+    updateBudgetUI();
+  }
+}
+
+function updateBudgetUI() {
+  const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+  document.getElementById("budgetDisplay").innerText = budget.toFixed(2);
+  document.getElementById("remainingDisplay").innerText = (budget - total).toFixed(2);
 }
 
 function renderHistory() {
@@ -78,5 +113,3 @@ function clearInputs() {
   document.getElementById("category").value = "";
   document.getElementById("date").value = "";
 }
-
-renderExpenses();
